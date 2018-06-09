@@ -13,6 +13,7 @@ namespace DAL
         {
             using (var context = new ValaisBookingEntities())
             {
+                
                 Booking book = new Booking();
                 book.CheckIn = checkin;
                 book.CheckOut = checkout;
@@ -20,9 +21,19 @@ namespace DAL
                 book.Lastname = lastname;
                 book.Price = price;
                 book.Date = date;
-                book.Room = room;
+                book.IdRoom = room.IdRoom;
                 context.Booking.Add(book);
                 context.SaveChanges();
+            }
+        }
+
+
+        //get booking by id name
+        public static List<Booking> getBooking(String firsname, String lastname)
+        {
+            using (var context = new ValaisBookingEntities())
+            {
+                return context.Booking.Include("Room").Where(b => b.Firstname == firsname && b.Lastname == lastname).ToList();
             }
         }
 

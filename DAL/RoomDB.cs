@@ -13,7 +13,7 @@ namespace DAL
     {
         using (var context = new ValaisBookingEntities())
         {
-            return context.Room.Include("Picture").Where(r => r.IdRoom == id).Single();
+            return context.Room.Include("Picture").Include("Hotel").Where(r => r.IdRoom == id).Single();
 
         }
     }
