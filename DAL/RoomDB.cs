@@ -43,12 +43,50 @@ namespace DAL
                                          where !(from res in listReservationInDate
                                                   select res.IdRoom).Contains(room.IdRoom)
                                          select room).ToList();
-                return finalListRoom;
+
+                finalListRoom = settingPrice(dateCheckIn, dateCheckOut, finalListRoom);   
+
+            return finalListRoom;
         }
     }
 
 
-    public static List<Room> getRoomsByAvancedSearch(string city, DateTime dateCheckIn, DateTime dateCheckOut, Boolean HasParking, Boolean HasWifi, int catMax, int catMin, Boolean HasTV, Boolean HasHairdryer, decimal maxPrice, decimal minPrice)
+    private static List<Room> settingPrice (DateTime cin, DateTime cout, List<Room> rooms)
+    {
+            
+                foreach(Room  r in rooms)
+                {
+                    if(hotel70Busy(r.IdHotel, cin, cout))
+                        r.Price = (decimal)((int)r.Price * 1.2) ;
+                }
+
+
+
+            return rooms;
+    }
+
+    private static bool hotel70Busy(int idHotel, DateTime cin, DateTime cout)
+    {
+            using (var context = new ValaisBookingEntities())
+            {
+                float nbRooms = context.Room.Where(r => r.IdHotel == idHotel).ToList().Count();
+                List<Room> listReservationInDate = context.Booking.Where(res => cin >= res.CheckIn && cin <= res.CheckOut || cout >= res.CheckIn && cout <= res.CheckOut || cin <= res.CheckIn && cout >= res.CheckOut).Select(r => r.Room).ToList();
+
+                float busyRooms = listReservationInDate.Where(r => r.IdHotel == idHotel).ToList().Count();
+
+                if ((busyRooms / nbRooms) >= 0.7)
+                {
+                    return true;
+                }
+                return false;
+            }
+    }
+
+
+
+
+
+            public static List<Room> getRoomsByAvancedSearch(string city, DateTime dateCheckIn, DateTime dateCheckOut, Boolean HasParking, Boolean HasWifi, int catMax, int catMin, Boolean HasTV, Boolean HasHairdryer, decimal maxPrice, decimal minPrice)
     {
         using (var context = new ValaisBookingEntities())
         {
@@ -72,9 +110,6 @@ namespace DAL
             return onlyPreference;
         }
     }
-
-
-
     //PICTURE .................................................................................................
 
     //get pictures by id room
