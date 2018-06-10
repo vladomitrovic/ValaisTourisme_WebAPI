@@ -12,12 +12,20 @@ namespace ValaisTourisme_WebAPI.Controllers
     [RoutePrefix("api/booking")]
     public class BookingController : ApiController
     {
-
+        [HttpPost]
         public IHttpActionResult PostNewBooking([FromBody]Booking b)
         {
             DAL.BookingDB.book(b.CheckIn, b.CheckOut, b.Firstname, b.Lastname, b.Price, b.Date, b.Room);
             return Ok(b);
         }
+
+        [HttpPost]
+        public IHttpActionResult DeleteBooking(int id)
+        {
+            DAL.BookingDB.cancelBook(id);
+            return Ok();
+        }
+
 
         // GET: api/booking
         [ResponseType(typeof(Booking))]
@@ -30,9 +38,7 @@ namespace ValaisTourisme_WebAPI.Controllers
             {
                 return NotFound();
             }
-
             return Ok(bookings);
-
         }
 
     }
