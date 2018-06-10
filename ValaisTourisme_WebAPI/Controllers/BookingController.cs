@@ -19,11 +19,11 @@ namespace ValaisTourisme_WebAPI.Controllers
             return Ok(b);
         }
 
-        [HttpPost]
-        public IHttpActionResult DeleteBooking(int id)
+        // DELETE: api/booking
+        [HttpDelete]
+        public void DeleteBooking([FromUri] Int32 id)
         {
             DAL.BookingDB.cancelBook(id);
-            return Ok();
         }
 
 

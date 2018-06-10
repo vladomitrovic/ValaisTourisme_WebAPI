@@ -37,13 +37,14 @@ namespace DAL
             }
         }
 
-        public static void cancelBook(int idBook)
+        public static bool cancelBook(int idBook)
         {
             using (var context = new ValaisBookingEntities())
             {
                 Booking book = (Booking)context.Booking.Where(b => b.IdBooking == idBook).Single();
                 context.Booking.Remove(book);
                 context.SaveChanges();
+                return true;
             }
         }
 
