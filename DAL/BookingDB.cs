@@ -8,7 +8,7 @@ namespace DAL
 {
     public class BookingDB
     {
-
+        //Book a room
         public static void book(DateTime checkin, DateTime checkout, String firstname, String lastname, decimal price, DateTime date, Room room)
         {
             using (var context = new ValaisBookingEntities())
@@ -37,6 +37,7 @@ namespace DAL
             }
         }
 
+        //cancel a room
         public static bool cancelBook(int idBook)
         {
             using (var context = new ValaisBookingEntities())

@@ -29,8 +29,8 @@ namespace DAL
     }
 
 
-
-    public static List<Room> getRoomsByBasicSearch(string city, DateTime dateCheckIn, DateTime dateCheckOut)
+        //get rooms by search
+        public static List<Room> getRoomsByBasicSearch(string city, DateTime dateCheckIn, DateTime dateCheckOut)
     {
         using (var context = new ValaisBookingEntities())
         {
@@ -50,8 +50,8 @@ namespace DAL
         }
     }
 
-
-    private static List<Room> settingPrice (DateTime cin, DateTime cout, List<Room> rooms)
+        //increase price if hotel busy
+        private static List<Room> settingPrice (DateTime cin, DateTime cout, List<Room> rooms)
     {
             
                 foreach(Room  r in rooms)
@@ -65,6 +65,7 @@ namespace DAL
             return rooms;
     }
 
+    //Check if hotel is busy
     private static bool hotel70Busy(int idHotel, DateTime cin, DateTime cout)
     {
             using (var context = new ValaisBookingEntities())
@@ -83,44 +84,6 @@ namespace DAL
     }
 
 
-
-
-
-            public static List<Room> getRoomsByAvancedSearch(string city, DateTime dateCheckIn, DateTime dateCheckOut, Boolean HasParking, Boolean HasWifi, int catMax, int catMin, Boolean HasTV, Boolean HasHairdryer, decimal maxPrice, decimal minPrice)
-    {
-        using (var context = new ValaisBookingEntities())
-        {
-
-            List<Room> avalaibleRooms = getRoomsByBasicSearch(city, dateCheckIn, dateCheckOut);
-
-
-            List<Room> onlyPreference = (List<Room>)from r in avalaibleRooms
-                                                    where r.HasTV = HasTV
-                                                    where r.HasHairDryer = HasHairdryer
-                                                    where r.Price >= minPrice
-                                                    where r.Price <= maxPrice
-                                                    where r.Hotel.Category >= catMin
-                                                    where r.Hotel.Category <= catMax
-                                                    where r.Hotel.HasParking = HasParking
-                                                    where r.Hotel.HasWifi = HasWifi
-                                                    select r;
-
-
-
-            return onlyPreference;
-        }
-    }
-    //PICTURE .................................................................................................
-
-    //get pictures by id room
-    public static List<Picture> getPicturesByIdRoom(int idRoom)
-    {
-        using (var context = new ValaisBookingEntities())
-        {
-            return context.Picture.Where(p => p.Room.IdRoom == idRoom).ToList();
-        }
-
-    }
 
 
 
